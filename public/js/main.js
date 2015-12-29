@@ -23191,6 +23191,7 @@ var Route = ReactRouter.Route;
 var CreateHistory = require('history/lib/createHashHistory');
 
 var Base = require('./components/Base.jsx');
+var Calculator = require('./components/Calculator.jsx');
 
 //Removes the haskey from the url and shows the page name in text
 var History = new CreateHistory({
@@ -23203,14 +23204,13 @@ var Routes = React.createElement(
   React.createElement(
     Route,
     { path: '/', component: Base },
-    React.createElement(Route, { path: '/' }),
-    React.createElement(Route, { path: '/' })
+    React.createElement(Route, { path: '/calc', component: Calculator })
   )
 );
 
 module.exports = Routes;
 
-},{"./components/Base.jsx":207,"history/lib/createHashHistory":37,"react":203,"react-router":70}],207:[function(require,module,exports){
+},{"./components/Base.jsx":207,"./components/Calculator.jsx":208,"history/lib/createHashHistory":37,"react":203,"react-router":70}],207:[function(require,module,exports){
 var React = require('react');
 var Link = require('react-router').Link;
 
@@ -23222,100 +23222,11 @@ var Base = React.createClass({
       'div',
       { className: 'container' },
       React.createElement(
-        'div',
-        { className: 'row' },
-        React.createElement(
-          'div',
-          { className: 'col-md-12' },
-          React.createElement(
-            'h1',
-            null,
-            'React Skeleton'
-          ),
-          React.createElement(
-            'h3',
-            null,
-            'What\'s included'
-          ),
-          React.createElement(
-            'p',
-            null,
-            'Npm packages:'
-          ),
-          React.createElement(
-            'ul',
-            null,
-            React.createElement(
-              'li',
-              null,
-              'History'
-            ),
-            React.createElement(
-              'li',
-              null,
-              'Browserify'
-            ),
-            React.createElement(
-              'li',
-              null,
-              'Babel-preset-react'
-            ),
-            React.createElement(
-              'li',
-              null,
-              'Http-server'
-            ),
-            React.createElement(
-              'li',
-              null,
-              'React'
-            ),
-            React.createElement(
-              'li',
-              null,
-              'React-DOM'
-            ),
-            React.createElement(
-              'li',
-              null,
-              'Watchify'
-            )
-          ),
-          React.createElement(
-            'p',
-            null,
-            'Other:'
-          ),
-          React.createElement(
-            'ul',
-            null,
-            React.createElement(
-              'li',
-              null,
-              'Bootstrap'
-            ),
-            React.createElement(
-              'li',
-              null,
-              'jQuery'
-            )
-          ),
-          React.createElement(
-            'h3',
-            null,
-            'Find it on github'
-          ),
-          React.createElement(
-            'a',
-            { href: 'https://github.com/elixir7/react-skeleton' },
-            React.createElement(
-              'button',
-              { type: 'btn', className: 'btn btn-primary' },
-              'Github'
-            )
-          )
-        )
-      )
+        'h1',
+        null,
+        'React Exercise Calculator'
+      ),
+      this.props.children
     );
   }
 });
@@ -23324,9 +23235,168 @@ module.exports = Base;
 
 },{"react":203,"react-router":70}],208:[function(require,module,exports){
 var React = require('react');
+var NumberField = require('./NumberField.jsx');
+
+var marginBottom = {
+  marginBottom: 20
+};
+
+var Calculator = React.createClass({
+  displayName: 'Calculator',
+
+  getInitialState: function () {
+    return { value: "" };
+  },
+  onClick: function (e) {
+    var operator = e.target.value;
+    var number1 = parseInt(this.refs.Number1.state.value);
+    var number2 = parseInt(this.refs.Number2.state.value);
+    var result = "";
+
+    if (operator === "+") {
+      result = number1 + number2;
+      console.log("Plus");
+    } else if (operator === "-") {
+      result = number1 - number2;
+      console.log("Minus");
+    } else if (operator === "/") {
+      result = number1 / number2;
+      console.log("Delat");
+    } else if (operator === "*") {
+      result = number1 * number2;
+      console.log("Gånger");
+    }
+
+    this.setState({ value: result });
+    console.log("operator:" + operator + " num1:" + number1 + " num2:" + number2 + " result:" + result);
+  },
+  clearInputs: function () {
+    this.refs.Number1.clear();
+    this.refs.Number2.clear();
+    this.setState({ value: "" });
+  },
+  render: function () {
+    return React.createElement(
+      'div',
+      { className: 'row' },
+      React.createElement(
+        'div',
+        { className: 'col-md-6 panel panel-default' },
+        React.createElement(
+          'h1',
+          null,
+          'Simple Calculator'
+        ),
+        React.createElement(
+          'div',
+          { className: 'panel-body' },
+          React.createElement(
+            'div',
+            { className: 'row form-group' },
+            React.createElement(NumberField, { ref: 'Number1', placeholder: '1337' }),
+            React.createElement(NumberField, { ref: 'Number2', placeholder: '2108' })
+          ),
+          React.createElement(
+            'div',
+            { className: 'row', style: marginBottom },
+            React.createElement(
+              'div',
+              { className: 'col-sm-3' },
+              React.createElement(
+                'button',
+                { type: 'btn', className: 'btn btn-primary btn-block', value: '+', onClick: this.onClick },
+                '+ Add'
+              )
+            ),
+            React.createElement(
+              'div',
+              { className: 'col-sm-3' },
+              React.createElement(
+                'button',
+                { type: 'btn', className: 'btn btn-primary btn-block', value: '-', onClick: this.onClick },
+                '- Subtract'
+              )
+            ),
+            React.createElement(
+              'div',
+              { className: 'col-sm-3' },
+              React.createElement(
+                'button',
+                { type: 'btn', className: 'btn btn-primary btn-block', value: '/', onClick: this.onClick },
+                '/ Devide'
+              )
+            ),
+            React.createElement(
+              'div',
+              { className: 'col-sm-3' },
+              React.createElement(
+                'button',
+                { type: 'btn', className: 'btn btn-primary btn-block', value: '*', onClick: this.onClick },
+                '* Multiply'
+              )
+            )
+          ),
+          React.createElement(
+            'div',
+            { className: 'row' },
+            React.createElement(
+              'div',
+              { className: 'col-sm-9' },
+              React.createElement(
+                'div',
+                { className: 'form-group' },
+                React.createElement('input', { className: 'form-control', placeholder: 'Result', value: this.state.value, readOnly: true })
+              )
+            ),
+            React.createElement(
+              'div',
+              { className: 'col-sm-3' },
+              React.createElement(
+                'button',
+                { type: 'btn', className: 'btn btn-danger btn-block', onClick: this.clearInputs },
+                'Clear'
+              )
+            )
+          )
+        )
+      )
+    );
+  }
+});
+
+module.exports = Calculator;
+
+},{"./NumberField.jsx":209,"react":203}],209:[function(require,module,exports){
+var React = require('react');
+
+var NumberField = React.createClass({
+  displayName: "NumberField",
+
+  getInitialState: function () {
+    return { value: "" };
+  },
+  onChange: function (e) {
+    this.setState({ value: e.target.value });
+  },
+  clear: function () {
+    this.setState({ value: "" });
+  },
+  render: function () {
+    return React.createElement(
+      "div",
+      { className: "col-sm-6" },
+      React.createElement("input", { className: "form-control", type: "text", placeholder: "NUMBER e.g. " + this.props.placeholder, value: this.state.value, onChange: this.onChange })
+    );
+  }
+});
+
+module.exports = NumberField;
+
+},{"react":203}],210:[function(require,module,exports){
+var React = require('react');
 var ReactDOM = require('react-dom');
 var Routes = require('./Routes.jsx');
 
 ReactDOM.render(Routes, document.getElementById('main'));
 
-},{"./Routes.jsx":206,"react":203,"react-dom":50}]},{},[208]);
+},{"./Routes.jsx":206,"react":203,"react-dom":50}]},{},[210]);
